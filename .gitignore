@@ -1,0 +1,4 @@
+# Intermediate build output - regenerate with build/run_all.sh
+work/
+
+.DS_Store
