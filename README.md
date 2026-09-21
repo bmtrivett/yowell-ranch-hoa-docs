@@ -11,7 +11,7 @@ over all 175 pages and publishes the result as a single HTML file where every
 document is searchable and each page of recognized text can be checked against
 an image of the original scan.
 
-**Live site:** https://YOUR-USERNAME.github.io/yowell-ranch-hoa-docs/
+**Live site:** https://bmtrivett.github.io/yowell-ranch-hoa-docs/
 
 ## What the page does
 
@@ -45,7 +45,7 @@ Records for anything that matters.
 2. In the repository, open **Settings → Pages**.
 3. Under **Build and deployment**, set **Source** to *Deploy from a branch*,
    pick your default branch (`main`) and the `/ (root)` folder, and save.
-4. Wait a minute, then load `https://<your-username>.github.io/<repo-name>/`.
+4. Wait a minute, then load `https://bmtrivett.github.io/yowell-ranch-hoa-docs/`.
 
 `index.html` at the repository root is all Pages needs. The empty `.nojekyll`
 file tells GitHub to serve the file as-is rather than running it through

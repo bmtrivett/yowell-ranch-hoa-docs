@@ -57,9 +57,9 @@ rather than left to dominate the file.
 
 ## Step 3 — Assembly (`build/3_build_site.py`)
 
-Reads every OCR text file, cleans it, and injects the result plus the base64
-page images into `build/template.html`, replacing the `__DATA__` and
-`__SCANS__` placeholders.
+Reads every OCR text file, cleans it, and injects the recognized text and
+base64-encoded page images directly into `build/template.html` (the script
+inserts the data into the template at build time).
 
 Text cleanup does three things:
 
