@@ -122,6 +122,20 @@ add `source_pdfs/` to `.gitignore`.
    `TITLES` or `category()` in `build/3_build_site.py` and rebuild.
 4. Commit the updated `index.html`.
 
+## Legal and licensing
+
+The recorded instruments in `source_pdfs/` are public records of Bell County,
+Texas. They are included here to make them searchable and easier to use; this
+repository is not affiliated with the Yowell Ranch HOA or its management
+company.
+
+The repository does not claim to be legal advice, and the OCR results are a
+finding aid only. For anything that matters legally, consult the official Bell
+County public records and the governing instruments themselves.
+
+The code in this repository is distributed under the MIT License. See
+[`LICENSE`](LICENSE) for the full text.
+
 ## Note on these documents
 
 The recorded instruments are public records of Bell County, Texas. This

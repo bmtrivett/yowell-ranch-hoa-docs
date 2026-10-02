@@ -48,9 +48,23 @@ mark{background:var(--hl);color:var(--hlink);border-radius:2px;padding:0 1px}
 .empty{color:var(--mute);padding:24px 0}
 .note{font-size:13px;color:var(--mute);margin:0 0 14px}
 @media (max-width:860px){main{grid-template-columns:1fr}nav{position:static;max-height:none}.pg.split .cols{grid-template-columns:1fr}}
+.lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(15,23,42,.72);z-index:40}
+.lightbox[hidden]{display:none}
+.lightbox-box{max-width:min(96vw,1100px);max-height:90vh;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 60px rgba(15,23,42,.35);overflow:hidden}
+.lightbox-header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px;color:var(--mute)}
+.lightbox-close{appearance:none;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);padding:6px 10px;cursor:pointer;font:inherit}
+.lightbox-box img{display:block;max-width:96vw;max-height:78vh;width:auto;height:auto;background:#fff}
+body.modal-open{overflow:hidden}
+.scan-open{appearance:none;background:none;border:0;padding:0;margin:0;color:var(--acc);font:inherit;cursor:pointer}
 </style>
 </head>
 <body>
+<div id="scan-lightbox" class="lightbox" hidden aria-hidden="true">
+  <div class="lightbox-box" role="dialog" aria-modal="true" aria-label="Full-size scanned page">
+    <div class="lightbox-header"><span>Full-size scan</span><button type="button" class="lightbox-close">Close</button></div>
+    <img alt="Full-size scanned page" src="">
+  </div>
+</div>
 <header><div class="hwrap">
 <h1>Yowell Ranch HOA Documents</h1>
 <div class="row">
@@ -89,8 +103,25 @@ function mountScan(pg){const c=pg.querySelector('.cols');if(c.querySelector('.sc
  const k=pg.dataset.key,src=SCANS[k];if(!src)return;
  const w=document.createElement('div');w.className='scan';
  w.innerHTML='<img loading="lazy" alt="Scanned page" src="data:image/png;base64,'+src+'">'+
-  '<div class="zoom"><span>Scanned original</span><a href="data:image/png;base64,'+src+'" target="_blank" rel="noopener">Open full size</a></div>';
+  '<div class="zoom"><span>Scanned original</span><button type="button" class="scan-open" data-src="'+src+'">Open full size</button></div>';
  c.appendChild(w);}
+
+function openScanLightbox(src){
+ const img=$('#scan-lightbox img');
+ const box=$('#scan-lightbox');
+ if(!img||!box)return;
+ img.src='data:image/png;base64,'+src;
+ box.hidden=false;
+ box.setAttribute('aria-hidden','false');
+ document.body.classList.add('modal-open');
+}
+function closeScanLightbox(){
+ const box=$('#scan-lightbox');
+ if(!box)return;
+ box.hidden=true;
+ box.setAttribute('aria-hidden','true');
+ document.body.classList.remove('modal-open');
+}
 
 let timer;let showScans=false;
 function render(){
@@ -118,13 +149,16 @@ function render(){
 document.addEventListener('click',e=>{
  const sb=e.target.closest('.scanbtn');if(sb){const pg=sb.closest('.pg');const on=!pg.classList.contains('split');
   pg.classList.toggle('split',on);sb.textContent=on?'Hide scan':'Show scan';if(on)mountScan(pg);return;}
+ const open=e.target.closest('.scan-open');if(open){openScanLightbox(open.dataset.src);return;}
+ const close=e.target.closest('.lightbox-close');if(close){closeScanLightbox();return;}
+ const box=e.target.closest('#scan-lightbox');if(box && e.target===box){closeScanLightbox();return;}
  const b=e.target.closest('.more');if(b){const pg=b.closest('.pg');pg.classList.toggle('full');b.textContent=pg.classList.contains('full')?'Show matches only':'Show full page';return;}
  const a=e.target.closest('nav a');if(a){const el=document.getElementById('d-'+a.dataset.id);if(el){el.open=true;el.scrollIntoView({behavior:'smooth',block:'start'});}}
 });
 $('#q').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(render,180);});
 $('#cat').addEventListener('change',render);
 $('#scans').addEventListener('change',e=>{showScans=e.target.checked;render();});
-document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement!==$('#q')){e.preventDefault();$('#q').focus();}});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement!==$('#q')){e.preventDefault();$('#q').focus();} if(e.key==='Escape'&&!$('#scan-lightbox').hidden){closeScanLightbox();}});
 render();
 </script>
 </body>
